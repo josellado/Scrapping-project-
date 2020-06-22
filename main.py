@@ -1,49 +1,35 @@
 #!/usr/bin/env python3
 
-import random
-from voices import getVoice
 from argparse import ArgumentParser
-import sys
-import os
-import subprocess
+import pandas as pd
+from src import functions
+from functools import reduce
 
 
-def bash_command(cmd):
-    proc = subprocess.Popen(['/bin/bash', '-c', cmd])
-    return proc.wait()
+army= pd.read_csv("output/army_Clean.csv") 
 
+parser = ArgumentParser(description="Este programa es para que Dumbledore conozca la fuerza que posee en cada asociacion y los magos que podria reclutar")
 
-def saluda(lugar, lang="es"):
-    a = random.choice(["Felipe", "Amanda", "Marc"])
-    if lang == "es":
-        return f"Hola {a} desde {lugar}"
-    elif lang == "en":
-        return f"Hello {a} from {lugar}"
-    elif lang == "pt":
-        return f"olá {a} de {lugar}, tudo bem?"
-    else:
-        return "Unrecognized language"
-
-
-parser = ArgumentParser(description="Este programa es para saludar a los TA")
-parser.add_argument(
-    "--lang", help="Configura el idioma del progama", default="es")
-parser.add_argument("--lugar", help="Configura el lugar",
-                    default=os.getenv("LUGAR"))
-parser.add_argument("--debug", help="Configura el lugar",
-                    default=False, action="store_true")
-parser.add_argument("--say", help="Dilo en voz alta",
-                    default=False, action="store_true")
-parser.add_argument("--times", help="Repitelo N veces", default=1, type=int)
-
-
+parser.add_argument( "-m", "--ministryOfMagic", help="Que aliados tiene dumbledore en el ministerio", action ='store_true')
+parser.add_argument( "-p", "--orderOfThePhenix",help="Cuales son los Miembros de la orden", action="store_true")
+parser.add_argument("-d", "--dumbledoresArmy", help="Aliados ya en el ejercito", action="store_true")
 args = parser.parse_args()
-if args.debug:
-    print(args)
-data = saluda(args.lugar, args.lang)
-print(data)
-if args.say:
-    voice = getVoice(args.lang)
-    print(f"Lo digo en voz alta con voz de {voice}")
+print (args)
 
-    bash_command(f"say -v '{voice}' '{data*args.times}'")
+
+def main():
+    army= pd.read_csv("output/army_Clean.csv")
+    select = []
+    if args.ministryOfMagic: 
+        select.append(army['ministryOfMagic'])
+    if args.orderOfThePhenix: 
+        select.append(army['orderOfThePhoenix'])   
+    if args.dumbledoresArmy: 
+        select.append(army['dumbledoresArmy']) 
+    if not select: 
+        return army
+    else:
+        select = reduce(lambda a,b: a | b, select)
+    return army[select]
+if __name__ =="__main__":
+    print(main())

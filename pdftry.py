@@ -9,10 +9,6 @@ def creaPDF():
     pdf.cell(75, 10, "ALBUS DUMBLEDORE  ARMY", 0, 2, 'C')
     pdf.cell(90, 10, " ", 0, 2, 'C')
     pdf.cell(-40)
-    #pdf.cell(50, 10, 'Question', 1, 0, 'C')
-    #pdf.cell(40, 10, 'Charles', 1, 0, 'C')
-    #pdf.cell(40, 10, 'Mike', 1, 2, 'C')
-    #pdf.cell(-90)
     
     pdf.output("archivo.pdf")
     pdf.output("src/reporteparaenviar.pdf", "F")

@@ -1,11 +1,12 @@
 
 import pandas as pd
 import numpy as np
+from argparse import ArgumentParser
 
 army= pd.read_csv("output/army_Clean.csv") 
 
 
-def main():
+def xx():
     army= pd.read_csv("output/army_Clean.csv")
     select = []
     if args.ministryOfMagic: 
@@ -19,7 +20,5 @@ def main():
     else:
         select = reduce(lambda a,b: a | b, select)
     return army[select]
-
-
-if __name__ == '__main__':
-    print(main())
+    print(xx())
+   
